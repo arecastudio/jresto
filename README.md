@@ -6,3 +6,7 @@ Untuk memenuhi kebutuhan pelaporan pajak bulanan yang sesuai dengan format permi
 
 Pengembangan ini ditujukan untuk memasarkan secara lebih luas lagi aplikasi ini agar dapat digunakan di berbagai
 restoran di wilayah Jayapura dan Papua pada umumnya.
+
+### Modul Produk
+> Menampilkan infomasi produk serta fungsi kontrol terhadap data produk.
+![screenshoot](img1.png)

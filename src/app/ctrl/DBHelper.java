@@ -33,7 +33,7 @@ public class DBHelper {
         boolean ret=false;
         Properties prop=new Properties();
         InputStream input=null;
-        String filename="/spk/config.properties";
+        String filename="/app/config.properties";
         try {
             //input = getClass().getResourceAsStream(filename);
             input=DBHelper.class.getResourceAsStream(filename);
