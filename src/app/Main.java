@@ -3,19 +3,23 @@ package app;
 import app.ctrl.Statis;
 import app.model.DataProduk;
 import app.view.Footer;
+import app.view.Login;
 import app.view.Produk;
 import javafx.application.Application;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    public BorderPane borderPane;
-    public Stage stage;
+    public static BorderPane borderPane;
+    public static Stage stage;
+    public static VBox vbox;
+
+    private ToolBar toolBar;
 
     public static MenuBar menuBar;
     public static MenuItem data_produk,pilih_kampung,log_out;
@@ -29,7 +33,9 @@ public class Main extends Application {
 
         Inits();
 
-        borderPane.setTop(menuBar);
+        vbox.getChildren().addAll(menuBar,toolBar);
+
+        borderPane.setTop(vbox);
         borderPane.setBottom(new Footer());
 
         stage.setTitle("JResto POS Payment 2.0");
@@ -42,7 +48,12 @@ public class Main extends Application {
         borderPane=new BorderPane();
         borderPane.setStyle(new Statis().getSTYLE_MAIN());
 
+        vbox=new VBox();
+        vbox.setAlignment(Pos.CENTER_LEFT);
+
         menuBar = new MenuBar();
+
+        toolBar=new ToolBar(new Button("Pembayaran"),new Separator(Orientation.VERTICAL),new Button("List Pesanan"));
 
         Menu menuBerkas = new Menu("Berkas");
         data_produk=new MenuItem("Data Produk");
@@ -71,7 +82,8 @@ public class Main extends Application {
     private void ClickMenu() {
         log_out.setOnAction(event -> {
             borderPane.setTop(null);
-            //borderPane.setCenter(new Login());
+            //borderPane.setCenter(null);
+            borderPane.setCenter(new Login());
         });
 
         data_produk.setOnAction(event -> {
