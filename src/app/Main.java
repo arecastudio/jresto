@@ -1,7 +1,9 @@
 package app;
 
 import app.ctrl.Statis;
+import app.model.DataProduk;
 import app.view.Footer;
+import app.view.Produk;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -16,7 +18,7 @@ public class Main extends Application {
     public Stage stage;
 
     public static MenuBar menuBar;
-    public static MenuItem data_barang,pilih_kampung,log_out;
+    public static MenuItem data_produk,pilih_kampung,log_out;
     public static MenuItem penggunaan_lahan,produksi_pertanian_perkebunan,kehutanan,peternakan,sumber_air,obyek_wisata,sumber_daya_mc;
     public static MenuItem rep_penggunaan_lahan,rep_produksi_pertanian_perkebunan,rep_kehutanan,rep_peternakan,rep_sumber_air,rep_obyek_wisata,rep_sumber_daya_mc;
     public static MenuItem set_user,set_role,set_db,manual_book,abouts;
@@ -32,7 +34,7 @@ public class Main extends Application {
 
         stage.setTitle("JResto POS Payment 2.0");
         stage.setScene(new Scene(borderPane, 1024, 500));
-        //stage.setMaximized(true);
+        stage.setMaximized(true);
         stage.show();
     }
 
@@ -43,10 +45,10 @@ public class Main extends Application {
         menuBar = new MenuBar();
 
         Menu menuBerkas = new Menu("Berkas");
-        data_barang=new MenuItem("Data Barang");
+        data_produk=new MenuItem("Data Produk");
         pilih_kampung=new MenuItem("Pilih Kampung");
         log_out=new MenuItem("Log out");
-        menuBerkas.getItems().addAll(data_barang,pilih_kampung,new SeparatorMenuItem(),log_out);
+        menuBerkas.getItems().addAll(data_produk,pilih_kampung,new SeparatorMenuItem(),log_out);
 
         Menu menuProses=new Menu("Proses");
         penggunaan_lahan=new MenuItem("Penggunaan Lahan");
@@ -72,8 +74,8 @@ public class Main extends Application {
             //borderPane.setCenter(new Login());
         });
 
-        data_barang.setOnAction(event -> {
-            //borderPane.setCenter(new Kampung());
+        data_produk.setOnAction(event -> {
+            borderPane.setCenter(new Produk());
         });
 
         set_user.setOnAction(e->{
