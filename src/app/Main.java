@@ -1,8 +1,8 @@
 package app;
 
 import app.ctrl.Statis;
-import app.model.DataProduk;
 import app.view.Footer;
+import app.view.KetegoriMeja;
 import app.view.Login;
 import app.view.Produk;
 import javafx.application.Application;
@@ -22,7 +22,7 @@ public class Main extends Application {
     private ToolBar toolBar;
 
     public static MenuBar menuBar;
-    public static MenuItem data_produk,pilih_kampung,log_out;
+    public static MenuItem data_produk,data_meja,data_kategori_meja,log_out;
     public static MenuItem penggunaan_lahan,produksi_pertanian_perkebunan,kehutanan,peternakan,sumber_air,obyek_wisata,sumber_daya_mc;
     public static MenuItem rep_penggunaan_lahan,rep_produksi_pertanian_perkebunan,rep_kehutanan,rep_peternakan,rep_sumber_air,rep_obyek_wisata,rep_sumber_daya_mc;
     public static MenuItem set_user,set_role,set_db,manual_book,abouts;
@@ -57,9 +57,10 @@ public class Main extends Application {
 
         Menu menuBerkas = new Menu("Berkas");
         data_produk=new MenuItem("Data Produk");
-        pilih_kampung=new MenuItem("Pilih Kampung");
+        data_meja=new MenuItem("Data Meja");
+        data_kategori_meja=new MenuItem("Kategori Meja");
         log_out=new MenuItem("Log out");
-        menuBerkas.getItems().addAll(data_produk,pilih_kampung,new SeparatorMenuItem(),log_out);
+        menuBerkas.getItems().addAll(data_produk,data_meja,data_kategori_meja,new SeparatorMenuItem(),log_out);
 
         Menu menuProses=new Menu("Proses");
         penggunaan_lahan=new MenuItem("Penggunaan Lahan");
@@ -88,6 +89,11 @@ public class Main extends Application {
 
         data_produk.setOnAction(event -> {
             borderPane.setCenter(new Produk());
+        });
+
+        data_kategori_meja.setOnAction(e->{
+
+            borderPane.setCenter(new KetegoriMeja());
         });
 
         set_user.setOnAction(e->{
