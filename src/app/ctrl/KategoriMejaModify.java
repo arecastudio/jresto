@@ -36,4 +36,46 @@ public class KategoriMejaModify {
         }
         return data;
     }
+
+    public int Simpan(DataKategoriMeja dkm){
+        int ret=0;
+        sql="INSERT INTO meja_kat(nama,tarif)VALUES(?,?);";
+        try {
+            pst=conn.prepareStatement(sql);
+            pst.setString(1,dkm.getNama());
+            pst.setDouble(2,dkm.getTarif());
+            ret=pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public int Ubah(DataKategoriMeja dkm){
+        int ret=0;
+        sql="UPDATE meja_kat SET nama=?,tarif=? WHERE id=?;";
+        try {
+            pst=conn.prepareStatement(sql);
+            pst.setString(1,dkm.getNama());
+            pst.setDouble(2,dkm.getTarif());
+            pst.setInt(3,dkm.getId());
+            ret=pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public int Hapus(int id){
+        int ret=0;
+        sql="DELETE FROM meja_kat WHERE id=?;";
+        try {
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1,id);
+            ret=pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
 }
