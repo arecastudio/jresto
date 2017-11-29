@@ -57,14 +57,14 @@ public class KetegoriMeja extends VBox {
         tx_tarif=new TextField();
         tx_tarif.setMaxWidth(150);
         tx_tarif.setAlignment(Pos.CENTER_RIGHT);
-        /*tx_tarif.textProperty().addListener(new ChangeListener<String>() {
+        tx_tarif.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 if (!t1.matches("\\d*")) {
                     tx_tarif.setText(t1.replaceAll("[^\\d]", ""));
                 }
             }
-        });*/
+        });
 
 
         bt_hapus=new Button("Hapus");
@@ -83,6 +83,11 @@ public class KetegoriMeja extends VBox {
                     int i=new KategoriMejaModify().Hapus(Integer.parseInt(tmpId));
                     if (i>0) Refresh();
                 }
+            }else {
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Alert");
+                alert.setHeaderText("Pilih menu/produk dulu.");
+                alert.showAndWait();
             }
         });
 
@@ -104,6 +109,11 @@ public class KetegoriMeja extends VBox {
                     dkm.setId(Integer.parseInt(tmpId));
                     int i=new KategoriMejaModify().Ubah(dkm);
                     if (i>0) Refresh();
+                }else {
+                    Alert alert=new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Alert");
+                    alert.setHeaderText("Data belum lengkap.");
+                    alert.showAndWait();
                 }
             }else{
                 //insert
@@ -113,6 +123,11 @@ public class KetegoriMeja extends VBox {
                     dkm.setNama(tx_nama.getText().trim());
                     int i=new KategoriMejaModify().Simpan(dkm);
                     if (i>0) Refresh();
+                }else {
+                    Alert alert=new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Alert");
+                    alert.setHeaderText("Data belum lengkap.");
+                    alert.showAndWait();
                 }
             }
         });
@@ -147,7 +162,8 @@ public class KetegoriMeja extends VBox {
                 if (table.getSelectionModel().getSelectedItem()!=null){
                     DataKategoriMeja dkm= (DataKategoriMeja) table.getSelectionModel().getSelectedItem();
                     tx_nama.setText(dkm.getNama());
-                    tx_tarif.setText(""+dkm.getTarif());
+                    int i=(int) dkm.getTarif();
+                    tx_tarif.setText(""+i);
                     tmpId=""+dkm.getId();
                     //System.out.println(tmpId);
                 }

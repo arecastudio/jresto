@@ -7,7 +7,7 @@ public class DataProduk {
     private int id,kategori_id;
     private String nama,waktu_buat,waktu_ubah,operator,tambahan,kategori;
     private double harga;
-    private byte gambar;
+    private Object gambar;
 
     public DataProduk(){}
 
@@ -75,11 +75,11 @@ public class DataProduk {
         this.harga = harga;
     }
 
-    public byte getGambar() {
+    public Object getGambar() {
         return gambar;
     }
 
-    public void setGambar(byte gambar) {
+    public void setGambar(Object gambar) {
         this.gambar = gambar;
     }
 

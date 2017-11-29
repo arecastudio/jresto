@@ -5,6 +5,7 @@ import app.model.DataProduk;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,5 +63,54 @@ public class ProdukModify {
             e.printStackTrace();
         }
         return data;
+    }
+
+    public int Simpan(DataProduk dp){
+        int ret=0;
+        sql="INSERT IGNORE INTO produk(nama,harga,kategori_id,tambahan,gambar)VALUES(?,?,?,?,?);";
+        try {
+            pst=conn.prepareStatement(sql);
+            pst.setString(1,dp.getNama());
+            pst.setDouble(2,dp.getHarga());
+            pst.setInt(3,dp.getKategori_id());
+            pst.setString(4,dp.getTambahan());
+
+            pst.setBinaryStream(5,(InputStream)dp.getGambar());
+
+            ret=pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  ret;
+    }
+
+    public int Hapus(int id){
+        int ret=0;
+        sql="DELETE FROM produk WHERE id=?";
+        try {
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1,id);
+            ret=pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public byte[] GetImage(String id) {
+        byte[] b=null;
+        try {
+            String sql = "SELECT gambar FROM produk WHERE id=?;";
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1, Integer.parseInt(id));
+            rs=pst.executeQuery();
+            if (rs.next()){
+                b=rs.getBytes(1);
+            }
+            pst.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return b;
     }
 }

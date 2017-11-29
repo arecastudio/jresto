@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -26,6 +27,10 @@ import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Optional;
 
 /**
  * Created by android on 11/23/17.
@@ -50,7 +55,8 @@ public class Produk extends VBox {
 
     private Button button_browse;
 
-    private String tmpIdKat="",tmpTambah="";
+    private String tmpIdKat="",tmpTambah="",tmpId="";
+    private String path="";
 
     public Produk(){
         Inits();
@@ -110,27 +116,37 @@ public class Produk extends VBox {
         tx_harga=new TextField();
         tx_harga.setMaxWidth(100);
         tx_harga.setAlignment(Pos.CENTER_RIGHT);
-        /*tx_harga.textProperty().addListener(new ChangeListener<String>() {
+        tx_harga.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 if (!t1.matches("\\d*")) {
                     tx_harga.setText(t1.replaceAll("[^\\d]", ""));
                 }
             }
-        });*/
-        tx_harga.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                try {
-                    int i=Integer.parseInt(t1);
-                }catch (Exception e){
-                    tx_harga.setText(s);
-                }
-            }
         });
 
         bt_hapus=new Button("Hapus");
         bt_hapus.setPrefWidth(100);
+        bt_hapus.setOnAction(e->{
+            if (tmpId!=""){
+                Alert a=new Alert(Alert.AlertType.CONFIRMATION);
+                a.setTitle("Konfirmasi");
+                a.setHeaderText("Konfirmasi Hapus.");
+                a.setContentText("Yakin hapus data ini?");
+
+                Optional<ButtonType> o=a.showAndWait();
+                if (o.get()==ButtonType.OK){
+                    //System.out.println("hapus");
+                    int i=new ProdukModify().Hapus(Integer.parseInt(tmpId));
+                    if (i>0) Refresh();
+                }
+            }else {
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Alert");
+                alert.setHeaderText("Pilih menu/produk dulu.");
+                alert.showAndWait();
+            }
+        });
 
         bt_refresh=new Button("Refresh");
         bt_refresh.setPrefWidth(100);
@@ -141,9 +157,41 @@ public class Produk extends VBox {
         bt_simpan=new Button("Simpan");
         bt_simpan.setPrefWidth(100);
         bt_simpan.setOnAction(e->{
-            if (tmpTambah!="" && tmpIdKat!="" && tx_harga.getText().trim().length()>0 && Integer.parseInt(tx_harga.getText().trim())>0 && tx_nama.getText().trim().length()>0){
-                System.out.println("Tersimpan.");
-                Refresh();
+            if (tmpId!=""){
+                //
+            }else {
+                if (file!=null && tmpTambah!="" && tmpIdKat!="" && tx_harga.getText().trim().length()>0 && Integer.parseInt(tx_harga.getText().trim())>0 && tx_nama.getText().trim().length()>0){
+                    Task<Integer>task=new Task<Integer>() {
+                        @Override
+                        protected Integer call() throws Exception {
+                            DataProduk dp=new DataProduk();
+                            dp.setNama(tx_nama.getText().trim());
+                            dp.setHarga(Double.parseDouble(tx_harga.getText().trim()));
+                            dp.setKategori_id(Integer.parseInt(tmpIdKat));
+                            dp.setTambahan(tmpTambah);
+
+                            FileInputStream fis= null;
+                            try {
+                                fis = new FileInputStream(file);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            dp.setGambar(fis);
+
+                            int i=new ProdukModify().Simpan(dp);
+                            return i;
+                        }
+                    };
+                    task.setOnSucceeded(event->{
+                        if (task.getValue()>0)Refresh();
+                    });
+                    task.run();
+                }else {
+                    Alert alert=new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Alert");
+                    alert.setHeaderText("Data belum lengkap.");
+                    alert.showAndWait();
+                }
             }
         });
 
@@ -191,13 +239,13 @@ public class Produk extends VBox {
         button_browse.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                file=fileChooser.showOpenDialog(Main.stage);
-                if (file!=null){
-                    ket.setText(""+ file);
-                    Image image=new Image(file.toURI().toString());
-                    imageView.setImage(image);
-                }
+                PilihGambar();
             }
+        });
+
+
+        imageView.setOnMouseClicked(e->{
+            PilihGambar();
         });
 
         table=new TabelProduk();
@@ -207,13 +255,51 @@ public class Produk extends VBox {
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 if (table.getSelectionModel().getSelectedItem()!=null){
                     DataProduk dp=(DataProduk) table.getSelectionModel().getSelectedItem();
+                    tmpId=dp.getId()+"";
                     tx_nama.setText(dp.getNama());
-                    tx_harga.setText(""+dp.getHarga());
+                    int i=(int)dp.getHarga();
+                    tx_harga.setText(""+i);
                     cb_tambahan.setValue(dp.getTambahan());
                     //cb_kategori.setValue(dp.getKategori());
+
+                    path=System.getProperty("java.io.tmpdir").toString();
+                    if (path.substring(path.length()-1,path.length())!="/") path+="/";
+                    //System.out.println("temp dir: "+path);
+
+                    imageView.setImage(imaji);
+
+                    byte[] b=new ProdukModify().GetImage(tmpId);
+                    if (b!=null){
+                        Task<Void>task=new Task<Void>() {
+                            @Override
+                            protected Void call() throws Exception {
+                                FileOutputStream fos = new FileOutputStream(path+tmpId+".jpg");
+                                fos.write(b);
+                                return null;
+                            }
+                        };
+                        task.setOnSucceeded(e->{
+                            File f=new File(path+tmpId+".jpg");
+                            Image image=new Image(f.toURI().toString());
+                            imageView.setImage(image);
+                        });
+
+                        Thread t=new Thread(task);
+                        t.setDaemon(true);
+                        t.start();
+                    }
                 }
             }
         });
+    }
+
+    private void PilihGambar(){
+        file=fileChooser.showOpenDialog(Main.stage);
+        if (file!=null){
+            ket.setText(""+ file);
+            Image image=new Image(file.toURI().toString());
+            imageView.setImage(image);
+        }
     }
 
     private void Refresh(){
@@ -229,5 +315,8 @@ public class Produk extends VBox {
 
         tmpIdKat="";
         tmpTambah="";
+        tmpId="";
+
+        table.setItems(new ProdukModify().SetTableItem());
     }
 }
