@@ -1,5 +1,6 @@
 package app.ctrl;
 
+import app.model.DataKategoriProduk;
 import app.model.DataProduk;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,25 @@ public class ProdukModify {
                 dp.setKategori(rs.getString(6));
                 dp.setTambahan(rs.getString(10));
                 data.add(dp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public ObservableList<DataKategoriProduk> SetComboItem(){
+        ObservableList<DataKategoriProduk> data=FXCollections.observableArrayList();
+        sql="SELECT id,jenis,kategori FROM kategori ORDER BY id ASC;";
+        try {
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            while (rs.next()){
+                DataKategoriProduk dkp=new DataKategoriProduk();
+                dkp.setId(rs.getInt(1));
+                dkp.setJenis(rs.getString(2));
+                dkp.setKategori(rs.getString(3));
+                data.add(dkp);
             }
         } catch (SQLException e) {
             e.printStackTrace();

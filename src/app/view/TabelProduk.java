@@ -37,7 +37,7 @@ public class TabelProduk extends TableView {
 
 
         idCol.setPrefWidth(50);
-        namaCol.setPrefWidth(350);
+        namaCol.setPrefWidth(250);
         hargaCol.setPrefWidth(100);
         kategoriCol.setPrefWidth(150);
         tambahanCol.setPrefWidth(100);
