@@ -53,9 +53,20 @@ public class KetegoriMeja extends VBox {
 
         tx_nama=new TextField();
         tx_nama.setPrefWidth(250);
+
         tx_tarif=new TextField();
         tx_tarif.setMaxWidth(150);
         tx_tarif.setAlignment(Pos.CENTER_RIGHT);
+        /*tx_tarif.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (!t1.matches("\\d*")) {
+                    tx_tarif.setText(t1.replaceAll("[^\\d]", ""));
+                }
+            }
+        });*/
+
+
         bt_hapus=new Button("Hapus");
         bt_hapus.setPrefWidth(100);
         //bt_hapus.setStyle("-fx-background-color: linear-gradient(#F00,#900);");
@@ -86,7 +97,7 @@ public class KetegoriMeja extends VBox {
         bt_simpan.setOnAction(e->{
             if (tmpId!=""){
                 //update
-                if (tx_nama.getText().trim()!="" && tx_tarif.getText().trim()!=""){
+                if (tx_nama.getText().trim()!="" && tx_tarif.getText().trim()!="" && Integer.parseInt(tx_tarif.getText().trim())>0){
                     DataKategoriMeja dkm=new DataKategoriMeja();
                     dkm.setTarif(Double.parseDouble(tx_tarif.getText().trim()));
                     dkm.setNama(tx_nama.getText().trim());
