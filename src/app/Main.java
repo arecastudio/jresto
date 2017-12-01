@@ -57,7 +57,7 @@ public class Main extends Application {
         data_kategori_produk=new MenuItem("Kategori Produk");
         data_meja=new MenuItem("Data Meja");
         data_kategori_meja=new MenuItem("Kategori Meja");
-        non_tunai=new MenuItem("Pembayaran Non Tunai");
+        non_tunai=new MenuItem("Non Tunai");
         log_out=new MenuItem("Log out");
         menuBerkas.getItems().addAll(data_produk,data_kategori_produk,data_meja,data_kategori_meja,new SeparatorMenuItem(),non_tunai,new SeparatorMenuItem(),log_out);
 
