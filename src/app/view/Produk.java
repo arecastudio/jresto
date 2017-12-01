@@ -18,8 +18,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -158,7 +156,37 @@ public class Produk extends VBox {
         bt_simpan.setPrefWidth(100);
         bt_simpan.setOnAction(e->{
             if (tmpId!=""){
-                //
+                if (tmpTambah!="" && tmpIdKat!="" && tx_harga.getText().trim().length()>0 && Integer.parseInt(tx_harga.getText().trim())>0 && tx_nama.getText().trim().length()>0){
+                    Task<Integer> task=new Task<Integer>() {
+                        @Override
+                        protected Integer call() throws Exception {
+                            DataProduk dp=new DataProduk();
+                            dp.setId(Integer.parseInt(tmpId));
+                            dp.setNama(tx_nama.getText().trim());
+                            dp.setHarga(Double.parseDouble(tx_harga.getText().trim()));
+                            dp.setKategori_id(Integer.parseInt(tmpIdKat));
+                            dp.setTambahan(tmpTambah);
+
+                            if (file!=null){
+                                FileInputStream fis= null;
+                                try {
+                                    fis = new FileInputStream(file);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                dp.setGambar(fis);
+                            }
+
+                            int i=new ProdukModify().Ubah(dp);
+                            return i;
+                        }
+                    };
+                    task.setOnSucceeded(evt->{
+                        if (task.getValue()>0)Refresh();
+                    });
+
+                    task.run();
+                }
             }else {
                 if (file!=null && tmpTambah!="" && tmpIdKat!="" && tx_harga.getText().trim().length()>0 && Integer.parseInt(tx_harga.getText().trim())>0 && tx_nama.getText().trim().length()>0){
                     Task<Integer>task=new Task<Integer>() {
@@ -196,7 +224,7 @@ public class Produk extends VBox {
         });
 
         ObservableList<String> opsi= FXCollections.observableArrayList();
-        opsi.addAll("YA","TIDAK");
+        opsi.addAll("TIDAK","YA");
         cb_tambahan=new ComboBox(opsi);
         cb_tambahan.valueProperty().addListener(new ChangeListener() {
             @Override
@@ -256,11 +284,17 @@ public class Produk extends VBox {
                 if (table.getSelectionModel().getSelectedItem()!=null){
                     DataProduk dp=(DataProduk) table.getSelectionModel().getSelectedItem();
                     tmpId=dp.getId()+"";
+                    ket.setText(dp.getId()+"");
                     tx_nama.setText(dp.getNama());
                     int i=(int)dp.getHarga();
                     tx_harga.setText(""+i);
                     cb_tambahan.setValue(dp.getTambahan());
-                    //cb_kategori.setValue(dp.getKategori());
+
+                    DataKategoriProduk dkp=new DataKategoriProduk();
+                    dkp.setId(dp.getKategori_id());
+                    dkp.setKategori(dp.getKategori());
+                    dkp.setJenis(dp.getJenis());
+                    cb_kategori.setValue(dkp);
 
                     path=System.getProperty("java.io.tmpdir").toString();
                     if (path.substring(path.length()-1,path.length())!="/") path+="/";
@@ -288,6 +322,8 @@ public class Produk extends VBox {
                         t.setDaemon(true);
                         t.start();
                     }
+
+
                 }
             }
         });

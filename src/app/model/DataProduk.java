@@ -5,7 +5,7 @@ package app.model;
  */
 public class DataProduk {
     private int id,kategori_id;
-    private String nama,waktu_buat,waktu_ubah,operator,tambahan,kategori;
+    private String nama,waktu_buat,waktu_ubah,operator,tambahan,kategori,jenis;
     private double harga;
     private Object gambar;
 
@@ -89,5 +89,13 @@ public class DataProduk {
 
     public void setKategori(String kategori) {
         this.kategori = kategori;
+    }
+
+    public String getJenis() {
+        return jenis;
+    }
+
+    public void setJenis(String jenis) {
+        this.jenis = jenis;
     }
 }
