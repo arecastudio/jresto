@@ -38,4 +38,18 @@ public class KategoriProdukModify {
         }
         return data;
     }
+
+    public int Simpan(DataKategoriProduk dkm){
+        int ret=0;
+        sql="INSERT IGNORE INTO kategori(jenis,kategori)VALUES(?,?);";
+        try {
+            pst=conn.prepareStatement(sql);
+            pst.setString(1,dkm.getJenis());
+            pst.setString(2,dkm.getKategori());
+            ret=pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
 }

@@ -39,7 +39,7 @@ public class KategoriMejaModify {
 
     public int Simpan(DataKategoriMeja dkm){
         int ret=0;
-        sql="INSERT INTO meja_kat(nama,tarif)VALUES(?,?);";
+        sql="INSERT IGNORE INTO meja_kat(nama,tarif)VALUES(?,?);";
         try {
             pst=conn.prepareStatement(sql);
             pst.setString(1,dkm.getNama());
