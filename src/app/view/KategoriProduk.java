@@ -16,6 +16,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.Optional;
+
 
 public class KategoriProduk extends VBox {
     private TableView table;
@@ -102,6 +104,14 @@ public class KategoriProduk extends VBox {
         bt_simpan.setOnAction(e->{
             if (tmpId!=""){
                 //update
+                if (cb_jenis.getValue()!="" && tx_kategori.getText().trim().length()>0){
+                    DataKategoriProduk dkp=new DataKategoriProduk();
+                    dkp.setId(Integer.parseInt(tmpId));
+                    dkp.setJenis(cb_jenis.getValue());
+                    dkp.setKategori(tx_kategori.getText().trim());
+                    int i=new KategoriProdukModify().Ubah(dkp);
+                    if (i>0) Refresh();
+                }
             }else{
                 //insert
                 if (cb_jenis.getValue()!="" && tx_kategori.getText().trim().length()>0){
@@ -116,6 +126,21 @@ public class KategoriProduk extends VBox {
 
         bt_hapus=new Button("Hapus");
         bt_hapus.setPrefWidth(100);
+        bt_hapus.setOnAction(e->{
+            if (tmpId!=""){
+                Alert a=new Alert(Alert.AlertType.CONFIRMATION);
+                a.setTitle("Konfirmasi");
+                a.setHeaderText("Konfirmasi Hapus.");
+                a.setContentText("Yakin hapus data ini?");
+
+                Optional<ButtonType> o=a.showAndWait();
+                if (o.get()==ButtonType.OK){
+                    //System.out.println("hapus");
+                    int i=new KategoriProdukModify().Hapus(Integer.parseInt(tmpId));
+                    if (i>0) Refresh();
+                }
+            }
+        });
 
         bt_refresh=new Button("Refresh");
         bt_refresh.setPrefWidth(100);

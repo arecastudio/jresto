@@ -19,7 +19,7 @@ public class Main extends Application {
     private ToolBar toolBar;
 
     public static MenuBar menuBar;
-    public static MenuItem data_produk,data_kategori_produk,data_meja,data_kategori_meja,log_out;
+    public static MenuItem data_produk,data_kategori_produk,data_meja,data_kategori_meja,non_tunai,log_out;
     public static MenuItem penggunaan_lahan,produksi_pertanian_perkebunan,kehutanan,peternakan,sumber_air,obyek_wisata,sumber_daya_mc;
     public static MenuItem rep_penggunaan_lahan,rep_produksi_pertanian_perkebunan,rep_kehutanan,rep_peternakan,rep_sumber_air,rep_obyek_wisata,rep_sumber_daya_mc;
     public static MenuItem set_user,set_role,set_db,manual_book,abouts;
@@ -57,8 +57,9 @@ public class Main extends Application {
         data_kategori_produk=new MenuItem("Kategori Produk");
         data_meja=new MenuItem("Data Meja");
         data_kategori_meja=new MenuItem("Kategori Meja");
+        non_tunai=new MenuItem("Pembayaran Non Tunai");
         log_out=new MenuItem("Log out");
-        menuBerkas.getItems().addAll(data_produk,data_kategori_produk,data_meja,data_kategori_meja,new SeparatorMenuItem(),log_out);
+        menuBerkas.getItems().addAll(data_produk,data_kategori_produk,data_meja,data_kategori_meja,new SeparatorMenuItem(),non_tunai,new SeparatorMenuItem(),log_out);
 
         Menu menuProses=new Menu("Proses");
         penggunaan_lahan=new MenuItem("Penggunaan Lahan");
@@ -96,6 +97,10 @@ public class Main extends Application {
         data_kategori_meja.setOnAction(e->{
 
             borderPane.setCenter(new KetegoriMeja());
+        });
+
+        non_tunai.setOnAction(e->{
+            borderPane.setCenter(new NonTunai());
         });
 
         set_user.setOnAction(e->{
