@@ -58,7 +58,7 @@ public class KategoriProduk extends VBox {
         tx_kategori.setPrefWidth(280);
 
         ObservableList<String> opsi= FXCollections.observableArrayList();
-        opsi.addAll("MAKAN","MINUM");
+        opsi.addAll("MAKAN","MINUM","LAINNYA");
         cb_jenis=new ComboBox<>(opsi);
 
         //==========================================================
